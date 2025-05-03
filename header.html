@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Amrythym</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: white;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: #000;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    .search-bar {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .search-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #222;
+      border-radius: 20px;
+      padding: 5px 15px;
+    }
+    .search-bar input {
+      width: 200px;
+      padding: 5px;
+      background: transparent;
+      border: none;
+      color: white;
+      outline: none;
+    }
+    .search-bar .search-btn {
+      padding: 3px 6px;
+      border: none;
+      background: transparent;
+      color: white;
+      cursor: pointer;
+    }
+    .search-results {
+      position: absolute;
+      top: 40px;
+      background-color: #111;
+      border: 1px solid #333;
+      border-radius: 5px;
+      width: 100%;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 999;
+    }
+    .search-results div {
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 1px solid #333;
+    }
+    .search-results div:hover {
+      background-color: #333;
+    }
+    .nav-links {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .account-icon {
+      cursor: pointer;
+      position: relative;
+    }
+    .account-icon svg {
+      width: 30px;
+      height: 30px;
+      fill: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <h1>Amrythym</h1>
+    </div>
+
+    <div class="search-bar">
+      <div class="search-input-wrapper">
+        <input type="text" id="search" placeholder="What do you want to play?">
+        <button class="search-btn" onclick="searchSongs()">🔍</button>
+      </div>
+      <div class="search-results" id="results"></div>
+    </div>
+
+    <div class="nav-links">
+      <a href="homepage.html" target="home">Home</a>
+      <a href="about.html" target="home">About</a>
+      <a href="team.html" target="home">Team</a>
+      <a href="contact.html" target="home">Contact</a>
+      <a href="account.html" class="account-icon" target="home">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="8" r="4" stroke="white" stroke-width="2" fill="none"/>
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="white" stroke-width="2" fill="none"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function searchSongs() {
+      const input = document.getElementById("search").value.toLowerCase();
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "";
+
+      const allSources = [
+        ...(JSON.parse(localStorage.getItem("songHistory")) || []),
+        ...(JSON.parse(localStorage.getItem("songName")) || []),
+        ...(JSON.parse(localStorage.getItem("likedSongs")) || []),
+        ...(JSON.parse(localStorage.getItem("playlists")) || []).flatMap(p => p.songs || [])
+      ];
+
+      const filtered = allSources.filter(song => song.songName?.toLowerCase().includes(input) || song.title?.toLowerCase().includes(input));
+
+      if (filtered.length === 0) {
+        resultsDiv.innerHTML = "<div>No results found</div>";
+        return;
+      }
+
+      filtered.forEach(song => {
+        const name = song.songName || song.title;
+        const src = song.songSrc || song.src;
+        const resultItem = document.createElement("div");
+        resultItem.textContent = name;
+        resultItem.onclick = () => {
+          parent.frames["footer"].postMessage({ songSrc: src, songName: name }, "*");
+          resultsDiv.innerHTML = "";
+          document.getElementById("search").value = "";
+        };
+        resultsDiv.appendChild(resultItem);
+      });
+    }
+
+    document.getElementById("search").addEventListener("input", searchSongs);
+  </script>
+</body>
+</html>
+

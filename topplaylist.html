@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Playlists</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            padding-bottom: 80px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #fff;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        .playlist-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .playlist {
+            width: 80%;
+            max-width: 500px;
+            padding: 15px;
+            margin: 10px;
+            background: linear-gradient(45deg, #222, #444);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+        }
+        .playlist:hover {
+            transform: scale(1.05);
+            background: linear-gradient(45deg, #444, #666);
+        }
+        .playlist img {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+        }
+        .playlist-info {
+            flex: 1;
+            text-align: left;
+            margin-left: 15px;
+        }
+        .playlist-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .playlist-subtitle {
+            font-size: 14px;
+            color: #aaa;
+        }
+        .song-list {
+            display: none;
+            width: 80%;
+            max-width: 500px;
+            margin-top: 10px;
+            background: #111;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .song {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .song:hover {
+            background: #222;
+        }
+        .song-title {
+            font-size: 16px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Top Playlists</h1>
+    
+    <div class="playlist-container">
+        <!-- Playlist 1 -->
+        <div class="playlist" onclick="toggleSongs('playlist1')">
+            <img src="chill.jpg" alt="Playlist">
+            <div class="playlist-info">
+                <p class="playlist-title">Chill Vibes</p>
+                <p class="playlist-subtitle">Relax & Unwind</p>
+            </div>
+        </div>
+        <div class="song-list" id="playlist1">
+            <div class="song" onclick="playSong('Kuthanthram.mp3', 'Kunthanthram')">
+                <span class="song-title">Kunthanthram</span>
+            </div>
+            <div class="song" onclick="playSong('Malabari Banger.mp3', 'Malabari Banger')">
+                <span class="song-title">Malabari Banger</span>
+            </div>
+        </div>
+
+        <!-- Playlist 2 -->
+        <div class="playlist" onclick="toggleSongs('playlist2')">
+            <img src="workout.jpeg" alt="Playlist">
+            <div class="playlist-info">
+                <p class="playlist-title">Workout Hits</p>
+                <p class="playlist-subtitle">Power Up</p>
+            </div>
+        </div>
+        <div class="song-list" id="playlist2">
+            <div class="song" onclick="playSong('YedaYung.mp3', 'Yeda Yung')">
+                <span class="song-title">Yeda Yung</span>
+            </div>
+            <div class="song" onclick="playSong('Pathikuchu.mp3', 'Pathikuchu')">
+                <span class="song-title">Pathikuchu</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSongs(playlistId) {
+            let playlist = document.getElementById(playlistId);
+            if (playlist.style.display === "none" || playlist.style.display === "") {
+                playlist.style.display = "block";
+            } else {
+                playlist.style.display = "none";
+            }
+        }
+
+        function playSong(songSrc, songName) {
+            console.log("Playing song:", songSrc, songName);
+            
+            // Send song details to the footer
+            parent.frames["footer"].postMessage({ songSrc, songName }, "*");
+
+            // Retrieve existing history or initialize empty array
+            let songHistory = JSON.parse(localStorage.getItem("songHistory")) || [];
+
+            // Check if the song is already in history (avoid duplicates)
+            if (!songHistory.some(song => song.songSrc === songSrc)) {
+                songHistory.push({ songSrc, songName });
+            }
+
+            // Store updated history back to localStorage
+            localStorage.setItem("songHistory", JSON.stringify(songHistory));
+        }
+    </script>
+
+</body>
+</html>

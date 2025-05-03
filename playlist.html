@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlists</title>
+    <style>
+        body {
+            background-color: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .playlist-container {
+            margin-top: 20px;
+        }
+
+        .playlist {
+            background: #222;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .playlist h2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .song-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .song-list li {
+            padding: 8px;
+            margin: 5px 0;
+            background: #333;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        input {
+            width: 200px;
+        }
+
+        button {
+            background-color: red;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: darkred;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label {
+            background-color: red;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Playlists</h1>
+
+    <div class="playlist-container" id="playlist-container"></div>
+
+    <div class="add-section">
+        <h2>Create New Playlist</h2>
+        <input type="text" id="new-playlist-name" placeholder="Enter Playlist Name">
+        <button onclick="createPlaylist()">Add Playlist</button>
+    </div>
+
+    <input type="file" id="file-input" accept="audio/*">
+    <script>
+        const playlistContainer = document.getElementById("playlist-container");
+        const fileInput = document.getElementById("file-input");
+
+        let playlists = JSON.parse(localStorage.getItem("playlists")) || {
+            "Favorites": [{ name: "Timeless", src: "timeless.mp3" }],
+            "Workout": [{ name: "Run It Up", src: "runitup.mp3" }],
+            "Chill Vibes": [{ name: "Song 3", src: "song3.mp3" }]
+        };
+
+        function savePlaylists() {
+            localStorage.setItem("playlists", JSON.stringify(playlists));
+        }
+
+        function renderPlaylists() {
+            playlistContainer.innerHTML = "";
+            Object.keys(playlists).forEach(playlistName => {
+                let playlistDiv = document.createElement("div");
+                playlistDiv.classList.add("playlist");
+                playlistDiv.innerHTML = `
+                    <h2>${playlistName} <button onclick="openFileInput('${playlistName}')">➕</button></h2>
+                    <ul class="song-list">
+                        ${playlists[playlistName].map(song => 
+                            `<li onclick="playSong('${song.src}', '${song.name}')">${song.name}</li>`).join("")}
+                    </ul>
+                `;
+                playlistContainer.appendChild(playlistDiv);
+            });
+        }
+
+        function createPlaylist() {
+            let newPlaylistName = document.getElementById("new-playlist-name").value.trim();
+            if (newPlaylistName && !playlists[newPlaylistName]) {
+                playlists[newPlaylistName] = [];
+                savePlaylists();
+                renderPlaylists();
+                document.getElementById("new-playlist-name").value = "";
+            } else {
+                alert("Playlist already exists or name is empty!");
+            }
+        }
+
+        function openFileInput(playlistName) {
+            fileInput.setAttribute("data-playlist", playlistName);
+            fileInput.click();
+        }
+
+        fileInput.addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            const playlistName = fileInput.getAttribute("data-playlist");
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const songSrc = e.target.result;
+                    const songName = file.name.replace(/\.[^/.]+$/, ""); // Remove file extension
+                    playlists[playlistName].push({ name: songName, src: songSrc });
+                    savePlaylists();
+                    renderPlaylists();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function playSong(songSrc, songName) {
+            console.log("Playing song:", songSrc, songName);
+
+            // Send to footer frame
+            parent.frames["footer"].postMessage({ songSrc, songName }, "*");
+
+            // Retrieve existing history or initialize empty array
+            let songHistory = JSON.parse(localStorage.getItem("songHistory")) || [];
+
+            // Avoid duplicate entries
+            if (!songHistory.some(song => song.songSrc === songSrc)) {
+                songHistory.push({ songSrc, songName });
+            }
+
+            // Store updated history in localStorage
+            localStorage.setItem("songHistory", JSON.stringify(songHistory));
+        }
+
+        window.onload = renderPlaylists;
+    </script>
+</body>
+</html>

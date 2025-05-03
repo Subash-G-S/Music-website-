@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amrythym - Contact Us</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        
+        main {
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .contact-form {
+            flex: 2;
+            min-width: 300px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 400;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 300;
+            color: #ccc;
+        }
+        
+        .info-item {
+            margin-bottom: 25px;
+        }
+        
+        .info-item h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            font-weight: 400;
+            color: #fff;
+        }
+        
+        .info-item p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+        
+        .social-links {
+            margin-top: 40px;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            margin-right: 15px;
+            color: #fff;
+            font-size: 18px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: #ccc;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            background-color: #111;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #fff;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+        
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        button {
+            padding: 14px 25px;
+            background-color: #fff;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background-color: #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .contact-info, .contact-form {
+                flex: 100%;
+            }
+        }
+        .success-message {
+        position: absolute;
+        left: 50%;
+        top: 85%;
+        transform: translate(-50%, -50%) scale(0.8);
+        background: rgb(211, 246, 145);
+        color: #000;
+        padding: 12px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 8px;
+        opacity: 0;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        box-shadow: 0px 4px 10px rgba(0, 255, 0, 0.3);
+        z-index: 1000;
+    }
+
+    /* Show animation */
+    .success-message.show {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="logo-container">
+            <div class="logo">♫</div>
+            <div class="logo-text">AMRYTHYM</div>
+        </div>
+        
+        <h1>Contact Us</h1>
+        <p style="margin-bottom: 40px; color: #aaa;">Get in touch with the Amrythym team. We'd love to hear from you!</p>
+        
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2>Contact Information</h2>
+                
+                <div class="info-item">
+                    <h3>Address</h3>
+                    <p>Amrita Vishwa Vidhyapeetham<br>Amritanagar<br>Coimbatore, 641112</p>
+                </div>
+                
+                <div class="info-item">
+                    <h3>Email</h3>
+                    <p>info@amrythym.com<br>support@amrythym.com</p>
+                </div>
+                
+                <div class="info-item">
+                    <h3>Phone</h3>
+                    <p>+91 8754849494<br>+91 6385335115</p>
+                </div>
+                
+                <div class="info-item">
+                    <h3>Hours</h3>
+                    <p>Monday - Friday: 9am - 6pm<br>Saturday: 10am - 4pm<br>Sunday: Closed</p>
+                </div>
+                
+                <div class="social-links">
+                    <a href="#">Instagram</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">YouTube</a>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <h2>Send Us a Message</h2>
+                
+                <form>
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject">
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Technical Support</option>
+                            <option value="partnership">Partnership</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form");
+    
+            form.addEventListener("submit", function(event) {
+                event.preventDefault(); // Prevent actual form submission
+                
+                // Check if message already exists
+                let existingMessage = document.querySelector(".success-message");
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+    
+                // Create a success message element
+                const successMessage = document.createElement("div");
+                successMessage.textContent = "✅ Message Sent!";
+                successMessage.classList.add("success-message");
+    
+                // Append the message after the form
+                form.appendChild(successMessage);
+    
+                // Trigger animation
+                setTimeout(() => {
+                    successMessage.classList.add("show");
+                }, 100); // Small delay to allow CSS transition
+    
+                // Remove message after 3 seconds with fade-out
+                setTimeout(() => {
+                    successMessage.classList.remove("show");
+                    setTimeout(() => {
+                        successMessage.remove();
+                    }, 500); // Wait for fade-out animation to complete
+                }, 3000);
+    
+                // Clear form fields
+                form.reset();
+            });
+        });
+    </script>
+    
+</body>
+</html>

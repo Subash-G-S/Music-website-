@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liked Songs</title>
+    <style>
+        body {
+            background-color: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .song-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .song-list li {
+            background: #222;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: red;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Liked Songs</h1>
+    <ul class="song-list" id="liked-songs-list"></ul>
+
+    <script>
+        const likedSongsList = document.getElementById("liked-songs-list");
+
+        function loadLikedSongs() {
+            let likedSongs = JSON.parse(localStorage.getItem("likedSongs")) || [];
+
+            likedSongsList.innerHTML = ""; // Clear existing list
+            if (likedSongs.length === 0) {
+                likedSongsList.innerHTML = "<p>No liked songs yet.</p>";
+                return;
+            }
+
+            likedSongs.forEach((song, index) => {
+                let li = document.createElement("li");
+                li.innerHTML = `
+                    <span>${song.name}</span>
+                    <button class="remove-btn" onclick="removeLikedSong(${index})">❌</button>
+                `;
+                likedSongsList.appendChild(li);
+            });
+        }
+
+        function removeLikedSong(index) {
+            let likedSongs = JSON.parse(localStorage.getItem("likedSongs")) || [];
+            likedSongs.splice(index, 1);
+            localStorage.setItem("likedSongs", JSON.stringify(likedSongs));
+            loadLikedSongs(); // Reload list
+        }
+
+        window.onload = loadLikedSongs;
+    </script>
+</body>
+</html>

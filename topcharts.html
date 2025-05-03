@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Charts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            padding-bottom: 80px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #fff;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        .song-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .song {
+            width: 80%;
+            max-width: 500px;
+            padding: 15px;
+            margin: 10px;
+            background: linear-gradient(45deg, #222, #444);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+        }
+        .song:hover {
+            transform: scale(1.05);
+            background: linear-gradient(45deg, #444, #666);
+        }
+        .song img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        .song-info {
+            flex: 1;
+            text-align: left;
+            margin-left: 15px;
+        }
+        .song-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .song-artist {
+            font-size: 14px;
+            color: #aaa;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Top Charts</h1>
+    
+    <div class="song-list">
+        <div class="song" onclick="playSong('Timeless.mp3', 'Timeless')">
+            <img src="images.jpeg" alt="Song">
+            <div class="song-info">
+                <p class="song-title">Timeless</p>
+                <p class="song-artist">The Weekend</p>
+            </div>
+        </div>
+
+        <div class="song" onclick="playSong('runitup.mp3', 'Run It Up')">
+            <img src="runitup.png" alt="Song">
+            <div class="song-info">
+                <p class="song-title">Run It Up</p>
+                <p class="song-artist">Hanumankind</p>
+            </div>
+        </div>
+
+        <div class="song" onclick="playSong('Morni.mp3', 'Morni')">
+            <img src="morni.jpeg" alt="Song">
+            <div class="song-info">
+                <p class="song-title">Morni</p>
+                <p class="song-artist">Badshah</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function playSong(songSrc, songName) {
+            console.log("Playing:", songSrc, songName);
+
+            // Send song details to the footer frame
+            parent.frames["footer"].postMessage({ songSrc, songName }, "*");
+
+            // Retrieve history or initialize
+            let songHistory = JSON.parse(localStorage.getItem("songHistory")) || [];
+
+            // Avoid duplicates
+            if (!songHistory.some(song => song.songSrc === songSrc)) {
+                songHistory.push({ songSrc, songName });
+            }
+
+            // Store updated history
+            localStorage.setItem("songHistory", JSON.stringify(songHistory));
+        }
+    </script>
+
+</body>
+</html>

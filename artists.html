@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Artists</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    .artist {
+      border-bottom: 1px solid #444;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+    }
+
+    .artist-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .artist-header img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid white;
+    }
+
+    .artist-info h2 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .artist-info p {
+      font-size: 16px;
+      color: #ccc;
+    }
+
+    .song-list {
+      margin-top: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: #111;
+      margin: 10px 0;
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    li:hover {
+      background-color: #222;
+    }
+
+    .song-title {
+      font-size: 18px;
+    }
+
+    .song-duration {
+      font-size: 14px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Artist 1: Anirudh Ravichander -->
+    <div class="artist">
+      <div class="artist-header">
+        <img src="anirudh.jpeg" alt="Anirudh Ravichander">
+        <div class="artist-info">
+          <h2>Anirudh Ravichander</h2>
+          <p>Known for his catchy and high-energy tracks, Anirudh is one of the most popular music directors and singers in South India. His debut with "Why This Kolaveri Di" took the internet by storm.</p>
+        </div>
+      </div>
+      <div class="song-list">
+        <ul>
+          <li onclick="playSong('whythiskol.mp3', 'Why This Kolaveri Di')">
+            <div class="song-title">Why This Kolaveri Di</div>
+            <div class="song-duration">4:10</div>
+          </li>
+          <li onclick="playSong('halamithi.mp3', 'Halamithi Habibo')">
+            <div class="song-title">Halamithi Habibo</div>
+            <div class="song-duration">3:40</div>
+          </li>
+          <li onclick="playSong('vaathi.mp3', 'Vaathi Coming')">
+            <div class="song-title">Vaathi Coming</div>
+            <div class="song-duration">3:30</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Artist 2: Shreya Ghoshal -->
+    <div class="artist">
+      <div class="artist-header">
+        <img src="shreya.jpg" alt="Shreya Ghoshal">
+        <div class="artist-info">
+          <h2>Shreya Ghoshal</h2>
+          <p>One of India's most loved playback singers, Shreya Ghoshal is known for her melodious voice and versatility across multiple Indian languages and genres.</p>
+        </div>
+      </div>
+      <div class="song-list">
+        <ul>
+          <li onclick="playSong('tum.mp3', 'Tum Hi Ho')">
+            <div class="song-title">Tum Hi Ho</div>
+            <div class="song-duration">4:20</div>
+          </li>
+          <li onclick="playSong('teriore.mp3', 'Teri Ore')">
+            <div class="song-title">Teri Ore</div>
+            <div class="song-duration">3:55</div>
+          </li>
+          <li onclick="playSong('sunnraha.mp3', 'Sunn Raha Hai')">
+            <div class="song-title">Sunn Raha Hai</div>
+            <div class="song-duration">5:00</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Artist 3: Arijit Singh -->
+    <div class="artist">
+      <div class="artist-header">
+        <img src="arijit.jpg" alt="Arijit Singh">
+        <div class="artist-info">
+          <h2>Arijit Singh</h2>
+          <p>Arijit Singh is a soulful singer whose voice has touched millions. With countless hits, he’s the go-to artist for love ballads, heartbreak, and deep emotions.</p>
+        </div>
+      </div>
+      <div class="song-list">
+        <ul>
+          <li onclick="playSong('channa.mp3', 'Channa Mereya')">
+            <div class="song-title">Channa Mereya</div>
+            <div class="song-duration">4:50</div>
+          </li>
+          <li onclick="playSong('raabta.mp3', 'Raabta')">
+            <div class="song-title">Raabta</div>
+            <div class="song-duration">3:45</div>
+          </li>
+          <li onclick="playSong('ae-dil.mp3', 'Ae Dil Hai Mushkil')">
+            <div class="song-title">Ae Dil Hai Mushkil</div>
+            <div class="song-duration">4:35</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function playSong(songSrc, songName) {
+            console.log("Playing song:", songSrc, songName);
+
+            // Send to footer frame
+            parent.frames["footer"].postMessage({ songSrc, songName }, "*");
+
+            // Retrieve existing history or initialize empty array
+            let songHistory = JSON.parse(localStorage.getItem("songHistory")) || [];
+
+            // Avoid duplicate entries
+            if (!songHistory.some(song => song.songSrc === songSrc)) {
+                songHistory.push({ songSrc, songName });
+            }
+
+            // Store updated history in localStorage
+            localStorage.setItem("songHistory", JSON.stringify(songHistory));
+        }
+  </script>
+
+</body>
+</html>

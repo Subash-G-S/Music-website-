@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Sidebar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            padding: 20px;
+            background-color: #060606;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .menu-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .menu-group {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .section-title {
+            font-size: 12px;
+            color: rgb(167, 165, 165);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .menu-item {
+            font-size: 16px;
+            color: rgb(249, 247, 247);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+        .menu-item svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .menu-item:hover {
+            color: #007bff;
+        }
+        .new-playlist {
+            padding: 15px;
+            border: 1px solid #20c997;
+            color: #20c997;
+            text-align: center;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: auto;
+        }
+        .new-playlist:hover {
+            background-color: #20c997;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="menu-container">
+            <div class="menu-group">
+                <div class="section-title">Browse</div>
+                <a href="new_releases.html" class="menu-item" target="home">New Releases</a>
+                <a href="topcharts.html" class="menu-item" target="home">Top Charts</a>
+                <a href="topplaylist.html" class="menu-item" target="home">Top Playlists</a>
+                
+                <a href="topartists.html" class="menu-item" target="home">Top Artists</a>
+                
+            </div>
+            <div class="menu-group">
+                <div class="section-title">Library</div>
+                <a href="history.html" class="menu-item" target="home">⏳ History</a>
+                <a href="liked_songs.html" class="menu-item" target="home">🎵 Liked Songs</a>
+                <a href="playlist.html" class="menu-item" target="home">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="white"/></svg>
+                    Playlists
+                </a>
+                
+                <a href="artists.html" class="menu-item" target="home">🎤 Artists</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player Footer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #000;
+            color: #fff;
+        }
+        .music-player {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #111;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            box-shadow: 0 -2px 10px rgba(255, 255, 255, 0.1);
+        }
+        .song-info {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .controls button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .controls button:hover {
+            transform: scale(1.2);
+        }
+        .progress-container {
+            flex: 1;
+            height: 5px;
+            background: #444;
+            margin: 0 15px;
+            cursor: pointer;
+            position: relative;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: red;
+            transition: width 0.2s linear;
+        }
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .volume-control input {
+            width: 80px;
+            cursor: pointer;
+        }
+        /* Like Button */
+        .like-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: transparent;
+            text-shadow: 0 0 0 white;
+            transition: transform 0.2s;
+        }
+        .like-button.liked {
+            color: red;
+            text-shadow: none;
+        }
+        .like-button:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+
+    <footer class="music-player">
+        <div class="song-info">
+            <p id="song-title">Select a Song</p>
+        </div>
+
+        <div class="controls">
+            <button id="prev-btn">⏮️</button>
+            <button id="play-btn">▶️</button>
+            <button id="next-btn">⏭️</button>
+            <button class="like-button" id="like-btn">❤️</button>
+        </div>
+
+        <div class="progress-container" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="volume-control">
+            <label for="volume">🔊</label>
+            <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
+        </div>
+    </footer>
+
+    <audio id="audio"></audio>
+
+    <script>
+        const audio = document.getElementById("audio");
+        const playBtn = document.getElementById("play-btn");
+        const prevBtn = document.getElementById("prev-btn");
+        const nextBtn = document.getElementById("next-btn");
+        const songTitle = document.getElementById("song-title");
+        const volumeControl = document.getElementById("volume");
+        const progressBar = document.getElementById("progress-bar");
+        const progressContainer = document.getElementById("progress-container");
+        const likeBtn = document.getElementById("like-btn");
+
+        let songQueue = [];
+        let currentSongIndex = -1;
+
+        function playSong(songSrc, songName) {
+            if (!songQueue.some(song => song.src === songSrc)) {
+                songQueue.push({ src: songSrc, name: songName });
+                currentSongIndex = songQueue.length - 1;
+            } else {
+                currentSongIndex = songQueue.findIndex(song => song.src === songSrc);
+            }
+            audio.src = songSrc;
+            songTitle.textContent = songName;
+            audio.play();
+            playBtn.textContent = "⏸️";
+            updateLikeButton();
+        }
+
+        playBtn.addEventListener("click", () => {
+            if (audio.paused) {
+                audio.play();
+                playBtn.textContent = "⏸️";
+            } else {
+                audio.pause();
+                playBtn.textContent = "▶️";
+            }
+        });
+
+        prevBtn.addEventListener("click", () => {
+            if (currentSongIndex > 0) {
+                currentSongIndex--;
+                playSong(songQueue[currentSongIndex].src, songQueue[currentSongIndex].name);
+            }
+        });
+
+        nextBtn.addEventListener("click", () => {
+            if (currentSongIndex < songQueue.length - 1) {
+                currentSongIndex++;
+                playSong(songQueue[currentSongIndex].src, songQueue[currentSongIndex].name);
+            }
+        });
+
+        volumeControl.addEventListener("input", (event) => {
+            audio.volume = event.target.value;
+        });
+
+        audio.addEventListener("timeupdate", () => {
+            const progressPercent = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        });
+
+        progressContainer.addEventListener("click", (event) => {
+            const width = progressContainer.clientWidth;
+            const clickX = event.offsetX;
+            const duration = audio.duration;
+            audio.currentTime = (clickX / width) * duration;
+        });
+
+        window.addEventListener("message", (event) => {
+            if (event.data.songSrc && event.data.songName) {
+                playSong(event.data.songSrc, event.data.songName);
+            }
+        });
+
+        likeBtn.addEventListener("click", () => {
+            let likedSongs = JSON.parse(localStorage.getItem("likedSongs")) || [];
+            let currentSong = songQueue[currentSongIndex];
+
+            let songIndex = likedSongs.findIndex(song => song.name === currentSong.name);
+            if (songIndex === -1) likedSongs.push(currentSong);
+            else likedSongs.splice(songIndex, 1);
+
+            localStorage.setItem("likedSongs", JSON.stringify(likedSongs));
+            updateLikeButton();
+        });
+
+        function updateLikeButton() {
+            let likedSongs = JSON.parse(localStorage.getItem("likedSongs")) || [];
+            likeBtn.classList.toggle("liked", likedSongs.some(song => song.name === songQueue[currentSongIndex].name));
+        }
+    </script>
+
+</body>
+</html>
+

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song History</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ff004f;
+        }
+        .history-list {
+            list-style: none;
+            padding: 0;
+        }
+        .history-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: #222;
+            border-radius: 5px;
+        }
+        button {
+            background: #ff004f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #cc003f;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Song History</h1>
+    <ul class="history-list" id="history"></ul>
+    <button onclick="clearHistory()">Clear History</button>
+
+    <script>
+        function loadHistory() {
+            let songHistory = JSON.parse(localStorage.getItem("songHistory")) || [];
+            let historyList = document.getElementById("history");
+            
+            historyList.innerHTML = ""; // Clear list before loading
+
+            if (songHistory.length === 0) {
+                historyList.innerHTML = "<li>No history found.</li>";
+                return;
+            }
+
+            songHistory.forEach(song => {
+                let listItem = document.createElement("li");
+                listItem.className = "history-item";
+                listItem.innerText = song.songName;
+                historyList.appendChild(listItem);
+            });
+        }
+
+        function clearHistory() {
+            localStorage.removeItem("songHistory");
+            loadHistory();
+        }
+
+        loadHistory();
+    </script>
+
+</body>
+</html>
+
+
